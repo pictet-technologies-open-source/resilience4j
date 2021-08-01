@@ -1,0 +1,24 @@
+<div style="padding: 20px">
+    <h1><mat-icon>trending_up</mat-icon> Exchange Rates</h1>
+
+    <div style="padding-top: 20px">
+        <mat-form-field style="padding-right: 20px; width: 10em">
+            <input [value]="amount"
+                   matInput
+                   required
+                   class="amount"
+                   placeholder="Amount"
+                   type="number">
+        </mat-form-field>
+
+        <mat-form-field>
+                <mat-select required [value]="baseCurrency" placeholder="Currency">
+                    <mat-option value="CAD">CAD - Canadian Dollar</mat-option>
+                    <mat-option value="EUR">EUR - Euro</mat-option>
+                    <mat-option value="GBP">GBP - Pound sterling</mat-option>
+                    <mat-option value="JPY">JPY - Japanese Yen</mat-option>
+                    <mat-option value="USD">USD - United States Dollar</mat-option>
+                </mat-select>
+        </mat-form-field>
+    </div>
+</div>

@@ -20,6 +20,13 @@
   </properties>
 
   <dependencies>
+
+    <!-- Spring boot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+
     <!-- Starter for resilience4j -->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -36,6 +43,12 @@
       <artifactId>resilience4j-micrometer</artifactId>
     </dependency>
 
+    <!-- Open Feign -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+
     <!-- Dev tools -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -49,7 +62,7 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Others -->
+    <!-- Swagger -->
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-boot-starter</artifactId>
@@ -57,11 +70,11 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
+      <artifactId>spring-context</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-core</artifactId>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
     </dependency>
 
     <!-- Testing -->
@@ -86,6 +99,7 @@
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -98,6 +112,7 @@
           </excludes>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 

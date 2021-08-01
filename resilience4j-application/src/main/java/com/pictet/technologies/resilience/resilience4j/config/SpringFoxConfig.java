@@ -15,8 +15,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @RequiredArgsConstructor
 public class SpringFoxConfig {
 
-    private final TypeResolver typeResolver;
-
     @Bean
     public Docket api() {
 

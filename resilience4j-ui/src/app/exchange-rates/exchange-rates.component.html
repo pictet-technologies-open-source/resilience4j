@@ -1,7 +1,10 @@
-<div style="padding: 20px">
-    <h1><mat-icon>trending_up</mat-icon> Exchange Rates</h1>
+<mat-toolbar class="toolbar">
+    <span class="toolbar-title"><mat-icon>trending_up</mat-icon> Exchange Rates</span>
+</mat-toolbar>
 
-    <div style="padding-top: 20px">
+<div style="padding-left: 20px">
+
+    <div>
         <mat-form-field style="padding-right: 20px; width: 10em">
             <input [value]="amount"
                    matInput
@@ -20,5 +23,6 @@
                     <mat-option value="USD">USD - United States Dollar</mat-option>
                 </mat-select>
         </mat-form-field>
+
     </div>
 </div>

@@ -1,0 +1,23 @@
+server:
+  port: 8100
+
+spring:
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+
+logging:
+  level:
+    com:
+      pictet:
+        technologies:
+          resilience:
+            resilience4j:
+              feign:
+                ExchangeRateClient: DEBUG

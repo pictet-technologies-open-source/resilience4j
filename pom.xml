@@ -16,8 +16,9 @@
   </parent>
 
   <modules>
-    <module>resilience4j-ui</module>
-    <module>resilience4j-application</module>
+    <module>resilience4j-store-ui</module>
+    <module>resilience4j-store-app</module>
+    <module>resilience4j-exchange-rate-proxy</module>
   </modules>
 
 </project>

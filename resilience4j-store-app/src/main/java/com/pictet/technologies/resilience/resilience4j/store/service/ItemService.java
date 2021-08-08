@@ -1,10 +1,10 @@
 package com.pictet.technologies.resilience.resilience4j.store.service;
 
 import com.pictet.technologies.resilience.resilience4j.store.domain.Item;
-import com.pictet.technologies.resilience.resilience4j.store.provider.exchangerate.ExchangeRateClient;
 import com.pictet.technologies.resilience.resilience4j.store.provider.exchangerate.api.CurrencyExchangeRates;
 import com.pictet.technologies.resilience.resilience4j.store.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,9 +13,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemService {
 
-    private final ExchangeRateClient exchangeRateClient;
+    private final ExchangeRateService exchangeRateService;
     private final ItemRepository itemRepository;
 
     public List<Item> findAll(String currency) {
@@ -24,13 +25,16 @@ public class ItemService {
 
         if(currency != null && !items.isEmpty()) {
 
-            final CurrencyExchangeRates latestRates = exchangeRateClient.getLatest(currency, BigDecimal.ONE);
-
-            items.forEach(item -> {
-                final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());
-                item.setCurrency(currency);
-                item.setPrice(item.getPrice().divide(conversionRate,2, RoundingMode.HALF_UP));
-            });
+            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency);
+            if(latestRates != null) {
+                items.forEach(item -> {
+                    final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());
+                    item.setCurrency(currency);
+                    item.setPrice(item.getPrice().divide(conversionRate, 2, RoundingMode.HALF_UP));
+                });
+            } else {
+                log.error("No exchange rates found for {}", currency);
+            }
         }
 
         return items;

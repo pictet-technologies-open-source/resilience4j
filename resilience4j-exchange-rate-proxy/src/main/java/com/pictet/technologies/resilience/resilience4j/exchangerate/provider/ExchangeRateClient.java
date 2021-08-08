@@ -1,4 +1,4 @@
-package com.pictet.technologies.resilience.resilience4j.exchangerate.feign;
+package com.pictet.technologies.resilience.resilience4j.exchangerate.provider;
 
 import com.pictet.technologies.resilience.resilience4j.exchangerate.api.CurrencyExchangeRates;
 import org.springframework.cloud.openfeign.FeignClient;

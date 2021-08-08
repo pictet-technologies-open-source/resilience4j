@@ -37,7 +37,7 @@
       <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
     </dependency>
 
-    <!-- Collect and display statistics -->
+    <!-- Collect statistics -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>

@@ -2,11 +2,13 @@ package com.pictet.technologies.resilience.resilience4j.store.provider.exchanger
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@Accessors(chain = true)
 public class CurrencyExchangeRates {
 
     private String base;
@@ -14,6 +16,7 @@ public class CurrencyExchangeRates {
     private ExchangeRates rates;
 
     @Data
+    @Accessors(chain = true)
     public static class ExchangeRates {
 
         @JsonProperty("CAD")
@@ -35,7 +38,12 @@ public class CurrencyExchangeRates {
     public BigDecimal getConversionRate(String toCurrency) {
 
         final BigDecimal conversionRate;
-        switch (toCurrency) {
+
+        if(toCurrency == null) {
+            throw new IllegalArgumentException("the currency must be provided");
+        }
+
+        switch (toCurrency.toUpperCase()) {
             case "EUR":
                 conversionRate = this.getRates().getEur();
                 break;

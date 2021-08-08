@@ -16,5 +16,19 @@ logging:
         technologies:
           resilience:
             resilience4j:
-              feign:
-                ExchangeRateClient: DEBUG
+              store:
+                provider:
+                  ExchangeRateClient: info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+

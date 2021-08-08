@@ -1,7 +1,7 @@
 package com.pictet.technologies.resilience.resilience4j.exchangerate.controller;
 
 import com.pictet.technologies.resilience.resilience4j.exchangerate.api.CurrencyExchangeRates;
-import com.pictet.technologies.resilience.resilience4j.exchangerate.feign.ExchangeRateClient;
+import com.pictet.technologies.resilience.resilience4j.exchangerate.provider.ExchangeRateClient;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

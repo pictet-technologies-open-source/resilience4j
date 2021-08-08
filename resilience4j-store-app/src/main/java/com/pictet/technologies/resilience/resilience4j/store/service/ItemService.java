@@ -28,12 +28,11 @@ public class ItemService {
             final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency);
             if(latestRates != null) {
                 items.forEach(item -> {
+                    // Price conversion
                     final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());
                     item.setCurrency(currency);
                     item.setPrice(item.getPrice().divide(conversionRate, 2, RoundingMode.HALF_UP));
                 });
-            } else {
-                log.error("No exchange rates found for {}", currency);
             }
         }
 

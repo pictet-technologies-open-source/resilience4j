@@ -19,5 +19,6 @@ logging:
         technologies:
           resilience:
             resilience4j:
-              feign:
-                ExchangeRateClient: DEBUG
+              exchangerate:
+                provider:
+                  ExchangeRateClient: DEBUG

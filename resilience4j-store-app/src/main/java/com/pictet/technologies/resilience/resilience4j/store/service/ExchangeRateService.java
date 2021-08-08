@@ -17,6 +17,8 @@ import java.math.RoundingMode;
 public class ExchangeRateService {
 
     private final ExchangeRateClient exchangeRateClient;
+
+    // Cached exchange rates, for recovery purpose
     private CurrencyExchangeRates latestExchangesRates;
 
     @CircuitBreaker(name = "getExchangeRates", fallbackMethod = "getExchangeRatesFallback")
@@ -30,32 +32,32 @@ public class ExchangeRateService {
 
         log.error("Ooops something went wrong when calling the exchange rate service", feignException);
 
-        if(latestExchangesRates != null) {
-
-            log.warn("use the latest received exchange rates", feignException);
-
-            if(latestExchangesRates.getBase().equals(currency)) {
-                return latestExchangesRates;
-            }
-
-            // Build a new currency exchange rate
-            final CurrencyExchangeRates currencyExchangeRates = new CurrencyExchangeRates();
-            currencyExchangeRates.setBase(currency);
-
-            final CurrencyExchangeRates.ExchangeRates exchangeRates = new CurrencyExchangeRates.ExchangeRates();
-            currencyExchangeRates.setRates(exchangeRates);
-
-            final BigDecimal conversionRate = latestExchangesRates.getConversionRate(currency);
-            exchangeRates.setCad(latestExchangesRates.getConversionRate("CAD").divide(conversionRate, 10, RoundingMode.HALF_UP));
-            exchangeRates.setEur(latestExchangesRates.getConversionRate("EUR").divide(conversionRate, 10, RoundingMode.HALF_UP));
-            exchangeRates.setUsd(latestExchangesRates.getConversionRate("USD").divide(conversionRate, 10, RoundingMode.HALF_UP));
-            exchangeRates.setJpy(latestExchangesRates.getConversionRate("JPY").divide(conversionRate, 10, RoundingMode.HALF_UP));
-            exchangeRates.setGbp(latestExchangesRates.getConversionRate("GBP").divide(conversionRate, 10, RoundingMode.HALF_UP));
-
-            return currencyExchangeRates;
+        if (latestExchangesRates == null) {
+            log.error("No exchange rates found for {}", currency);
+            return null;
         }
 
-        return null;
+        log.warn("use the latest received exchange rates received on {}", latestExchangesRates.getDate(), feignException);
+        if (latestExchangesRates.getBase().equals(currency)) {
+            // No conversion to perform
+            return latestExchangesRates;
+        }
+
+        // Build a new currency exchange rate
+        return new CurrencyExchangeRates()
+                .setBase(currency)
+                .setRates(new CurrencyExchangeRates.ExchangeRates()
+                        .setCad(computeExchangeRate(latestExchangesRates, currency, "CAD"))
+                        .setEur(computeExchangeRate(latestExchangesRates, currency, "EUR"))
+                        .setUsd(computeExchangeRate(latestExchangesRates, currency, "USD"))
+                        .setJpy(computeExchangeRate(latestExchangesRates, currency, "JPY"))
+                        .setGbp(computeExchangeRate(latestExchangesRates, currency, "GBP")));
+    }
+
+    private BigDecimal computeExchangeRate(CurrencyExchangeRates exchangeRates, String baseCurrency, String targetCurrency) {
+
+        final BigDecimal conversionRate = exchangeRates.getConversionRate(baseCurrency);
+        return latestExchangesRates.getConversionRate(targetCurrency).divide(conversionRate, 10, RoundingMode.HALF_UP);
     }
 
 }

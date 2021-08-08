@@ -20,7 +20,7 @@ public class CurrencyExchangeRates {
         private BigDecimal cad;
 
         @JsonProperty("EUR")
-        private double eur;
+        private BigDecimal eur;
 
         @JsonProperty("GBP")
         private BigDecimal gbp;
@@ -30,6 +30,32 @@ public class CurrencyExchangeRates {
 
         @JsonProperty("USD")
         private BigDecimal usd;
+    }
+
+    public BigDecimal getConversionRate(String toCurrency) {
+
+        final BigDecimal conversionRate;
+        switch (toCurrency) {
+            case "EUR":
+                conversionRate = this.getRates().getEur();
+                break;
+            case "CAD":
+                conversionRate = this.getRates().getCad();
+                break;
+            case "USD":
+                conversionRate = this.getRates().getUsd();
+                break;
+            case "GBP":
+                conversionRate = this.getRates().getGbp();
+                break;
+            case "JPY":
+                conversionRate = this.getRates().getJpy();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported currency: " + toCurrency);
+        }
+
+        return conversionRate;
     }
 
 }

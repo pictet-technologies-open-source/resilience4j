@@ -9,8 +9,10 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class Item {
 
+    private long id;
     private String shortName;
     private String description;
-    private BigDecimal priceEuro;
+    private BigDecimal price;
+    private String currency;
 
 }

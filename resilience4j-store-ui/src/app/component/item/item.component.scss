@@ -1,0 +1,17 @@
+.item {
+  background-color: white;
+
+  .description {
+    height: 80px;
+    overflow: hidden;
+  }
+
+  .price {
+    padding-top: 5px;
+    float: right;
+    font-size: 20px;
+    color: deeppink;
+  }
+
+
+}

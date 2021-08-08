@@ -1,0 +1,41 @@
+.mat-icon {
+  vertical-align: middle;
+}
+
+.toolbar {
+  border-bottom: black solid 0.5px;
+  margin-bottom: 50px;
+  background-color: teal;
+  color: white;
+  font-size: 18px;
+
+  .ccy-conversion-toggle {
+    font-size: 18px;
+    padding-right: 15px;
+    font-weight: normal;
+  }
+
+  .ccy-conversion-cancel {
+    cursor: pointer;
+    padding-right: 10px;
+  }
+
+  .title-icon {
+    font-size: 40px;
+    height: 40px ;
+    width: 40px;
+  }
+
+}
+
+.toolbar-title {
+  font-size: 30px;
+}
+
+
+.right {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+

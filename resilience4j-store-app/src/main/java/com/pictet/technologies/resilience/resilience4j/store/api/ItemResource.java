@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class ItemResource {
 
+    private Long id;
     private String shortName;
     private String description;
     private BigDecimal price;

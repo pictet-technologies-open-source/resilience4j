@@ -23,3 +23,5 @@
 hs_err_pid*
 /resilience4j-ui/node_modules/
 /resilience4j-ui/dist/
+/resilience4j-store-ui/node_modules/
+/resilience4j-store-ui/dist/resilience4j-ui/

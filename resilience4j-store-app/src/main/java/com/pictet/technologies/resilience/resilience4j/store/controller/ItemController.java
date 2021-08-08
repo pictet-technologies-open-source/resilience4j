@@ -2,8 +2,8 @@ package com.pictet.technologies.resilience.resilience4j.store.controller;
 
 
 import com.pictet.technologies.resilience.resilience4j.store.api.ItemResource;
-import com.pictet.technologies.resilience.resilience4j.store.provider.exchangerate.ExchangeRateClient;
-import com.pictet.technologies.resilience.resilience4j.store.repository.ItemRepository;
+import com.pictet.technologies.resilience.resilience4j.store.mapper.ItemMapper;
+import com.pictet.technologies.resilience.resilience4j.store.service.ItemService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,27 +16,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/currency")
+@RequestMapping(value = "/items")
 @RequiredArgsConstructor
 public class ItemController {
 
-    private final ExchangeRateClient exchangeRateClient;
-    private final ItemRepository itemRepository;
+    private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
+    @ApiOperation("Get the items")
+    @GetMapping
+    public ResponseEntity<List<ItemResource>> getItems(@RequestParam(required = false) String currency) {
 
-    @ApiOperation("Get the exchange rates for a given currency")
-    @GetMapping("/items")
-    public ResponseEntity<List<ItemResource>> getItems(@RequestParam String currency) {
-
-        // TODO
-
-        final List<ItemResource> items = itemRepository.findAll().stream().map(item ->
-                new ItemResource().setShortName(item.getShortName())
-                        .setDescription(item.getDescription())
-                        .setPrice(item.getPriceEuro())
-                        .setCurrency("EUR")).collect(Collectors.toList());
-
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(itemService.findAll(currency).stream()
+                .map(itemMapper::toResource)
+                .collect(Collectors.toList()));
     }
 
 }

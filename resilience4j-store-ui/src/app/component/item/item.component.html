@@ -1,0 +1,11 @@
+<mat-card fxLayout="column" class="item">
+    <mat-card-title>{{item?.shortName}}</mat-card-title>
+    <mat-card-content style="height: 100px;">
+        <div class="description">
+         {{item?.description}}
+        </div>
+        <div class="price">
+            {{item?.price}} {{item?.currency}}
+        </div>
+    </mat-card-content>
+</mat-card>

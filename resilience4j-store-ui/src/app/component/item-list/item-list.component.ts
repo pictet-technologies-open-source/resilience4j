@@ -32,7 +32,7 @@ export class ItemListComponent implements OnInit {
       this.currency = null;
     } else {
       this.currencyConversionEnabled = true;
-      this.currency = ItemListComponent.DEFAULT_CURRENCY
+      this.currency = ItemListComponent.DEFAULT_CURRENCY;
     }
     this.reloadItems();
   }

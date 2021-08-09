@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Item} from "../../model/item";
-import {ItemService} from "../../services/item.service";
+import {Item} from '../../model/item';
+import {ItemService} from '../../services/item.service';
 
 @Component({
   selector: 'app-item-list',
@@ -27,7 +27,7 @@ export class ItemListComponent implements OnInit {
   }
 
   toggleCurrencyConversion() {
-    if(this.currencyConversionEnabled) {
+    if (this.currencyConversionEnabled) {
       this.currencyConversionEnabled = false;
       this.currency = null;
     } else {

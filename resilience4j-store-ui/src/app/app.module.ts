@@ -10,7 +10,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ItemListComponent} from './component/item-list/item-list.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {HttpErrorsInterceptor} from './interceptor/http-errors-interceptor';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ItemComponent} from './component/item/item.component';

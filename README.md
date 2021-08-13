@@ -44,11 +44,11 @@ $ npm start
 
 ## URLs
 
-Web application : http://localhost:4200/#/
-Actuator : http://localhost:8080/actuator/
-Prometheus : http://localhost:9090/classic/targets#job-store-app
-Grafana : http://localhost:3000/?orgId=1
-Swagger : http://localhost:8080/swagger-ui/#/currency-controller/getExchangeRatesUsingGET
+- Web application : http://localhost:4200/#/
+- Actuator : http://localhost:8080/actuator/
+- Prometheus : http://localhost:9090/classic/targets#job-store-app
+- Grafana : http://localhost:3000/?orgId=1
+- Swagger : http://localhost:8080/swagger-ui/#/currency-controller/getExchangeRatesUsingGET
 
 ## Call the application using Apache HTTP Server benchmarking tool
 

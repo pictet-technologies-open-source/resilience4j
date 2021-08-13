@@ -33,8 +33,8 @@
 
     <!-- Starter for resilience4j -->
     <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-spring-boot2</artifactId>
     </dependency>
 
     <!-- Collect statistics -->

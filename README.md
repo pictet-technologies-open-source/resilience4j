@@ -70,7 +70,8 @@ and y the number of concurrent users
 
 ## References
 
-- https://resilience4j.readme.io/docs
-- https://github.com/resilience4j/resilience4j
-- https://prometheus.io/
-- https://grafana.com/
+- Resilience4j doc : https://resilience4j.readme.io/docs
+- Resilience4j repository : https://github.com/resilience4j/resilience4j
+- Prometheus : https://prometheus.io/
+- Grafana : https://grafana.com/
+- Exchange rate free api : https://exchangerate.host/#/

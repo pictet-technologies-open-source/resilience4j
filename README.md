@@ -56,7 +56,7 @@ $ npm start
 $ ab -n x -c y 'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
-where x is the number of call
+where x is the number of calls
 and y the number of concurrent users  
 
 

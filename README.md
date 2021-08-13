@@ -1,5 +1,7 @@
 # resilience4j
-Resilience4j showcase
+
+This project aims at demonstrating how to use resillience4j in a spring boot app.
+
 
 ## Compile the application
 
@@ -56,3 +58,8 @@ ab -n x -c y 'http://127.0.0.1:4200/items?currency=GBP'
 
 where x is the number of call
 and y the number of concurrent users  
+
+
+## References
+
+https://resilience4j.readme.io/docs

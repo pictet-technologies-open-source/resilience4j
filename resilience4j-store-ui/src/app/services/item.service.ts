@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from "rxjs";
-import {Item} from "../model/item";
+import {Observable} from 'rxjs';
+import {Item} from '../model/item';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ItemService {
   public retrieveAllItems(currency: string): Observable<Array<Item>> {
 
     let params = new HttpParams();
-    if(currency) {
+    if (currency) {
       params = params.set('currency', currency);
     }
 

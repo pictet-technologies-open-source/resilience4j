@@ -70,7 +70,7 @@ and y the number of concurrent users
 
 ## References
 
-https://resilience4j.readme.io/docs
-https://github.com/resilience4j/resilience4j
-https://prometheus.io/
-https://grafana.com/
+- https://resilience4j.readme.io/docs
+- https://github.com/resilience4j/resilience4j
+- https://prometheus.io/
+- https://grafana.com/

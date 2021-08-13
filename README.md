@@ -53,7 +53,7 @@ $ npm start
 ## Call the application using Apache HTTP Server benchmarking tool
 
 ```
-ab -n x -c y 'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n x -c y 'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 where x is the number of call

@@ -25,9 +25,10 @@ public class ExchangeRateService {
     private CurrencyExchangeRates latestExchangesRates;
 
     // When using retry and circuit breaker together
-    // - Don't specify a fallback if you are also using a circuit breaker
+    // - Don't specify a fallback on the retry
     // - Change the aspect order (see the application.yaml)
-    @Retry(name = ExchangeRateService.RESILIENCE_NAME /*, fallbackMethod = "getExchangeRatesRetryFallback"*/ )
+    //@Retry(name = ExchangeRateService.RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRetryFallback")
+    @Retry(name = ExchangeRateService.RESILIENCE_NAME)
     @CircuitBreaker(name = ExchangeRateService.RESILIENCE_NAME, fallbackMethod = "getExchangeRatesCircuitBreakerFallback")
     public CurrencyExchangeRates getExchangeRates(String currency) {
 

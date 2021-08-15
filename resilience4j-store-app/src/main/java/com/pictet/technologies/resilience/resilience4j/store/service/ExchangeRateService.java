@@ -4,10 +4,12 @@ import com.pictet.technologies.resilience.resilience4j.store.provider.exchangera
 import com.pictet.technologies.resilience.resilience4j.store.provider.exchangerate.api.CurrencyExchangeRates;
 import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,14 +29,11 @@ public class ExchangeRateService {
     // Cached exchange rates, for recovery purpose
     private CurrencyExchangeRates latestExchangesRates;
 
-    // When using retry and circuit breaker together
-    // - Don't specify a fallback on the retry
-    // - Change the aspect order (see the application.yaml)
-    //@Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = GET_RATE_FALLBACK)
-    @Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME)
-    @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallback")
     @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesBulkheadFallback")
+    //@TimeLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesTimeLimiterFallback")
     @RateLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRateLimiterFallback")
+    @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesCircuitBreakerFallback")
+    @Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallback")
     public CurrencyExchangeRates getExchangeRates(String currency) {
 
         try {
@@ -48,18 +47,29 @@ public class ExchangeRateService {
             log.error("Exchange rate service failed with message: {}", ex.getMessage());
             throw ex;
         }
-
     }
 
-    public CurrencyExchangeRates getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
+    @SuppressWarnings("unused")
+    private CurrencyExchangeRates getExchangeRatesCircuitBreakerFallback(String currency, CallNotPermittedException exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
-    public CurrencyExchangeRates getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
+    @SuppressWarnings("unused")
+    private CurrencyExchangeRates getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
-    public CurrencyExchangeRates getExchangeRatesFallback(String currency, Exception exception) {
+    @SuppressWarnings("unused")
+    private CurrencyExchangeRates getExchangeRatesTimeLimiterFallback(String currency, Exception exception) {
+        return getExchangeRatesFallback(currency, exception);
+    }
+
+    @SuppressWarnings("unused")
+    private CurrencyExchangeRates getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
+        return getExchangeRatesFallback(currency, exception);
+    }
+
+    private CurrencyExchangeRates getExchangeRatesFallback(String currency, Exception exception) {
 
         log.error("Exchange rate fallback applied because of {}: {}", exception.getClass().getCanonicalName(), exception.getMessage());
 

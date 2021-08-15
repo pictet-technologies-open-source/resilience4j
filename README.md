@@ -111,7 +111,7 @@ the exchange rate service is UP
 
 **When**
 ```
-$ ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 10 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**

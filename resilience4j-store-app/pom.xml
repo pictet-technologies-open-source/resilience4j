@@ -31,20 +31,24 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!-- Starter for resilience4j -->
+    <!-- Resilience4j -->
     <dependency>
       <groupId>io.github.resilience4j</groupId>
       <artifactId>resilience4j-spring-boot2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-reactor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-micrometer</artifactId>
     </dependency>
 
     <!-- Collect statistics -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.github.resilience4j</groupId>
-      <artifactId>resilience4j-micrometer</artifactId>
     </dependency>
     <dependency>
       <groupId>io.micrometer</groupId>

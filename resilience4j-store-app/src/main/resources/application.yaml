@@ -38,12 +38,6 @@ management:
     ratelimiters:
       enabled: false
 
-resilience4j:
-  circuitbreaker:
-    circuit-breaker-aspect-order: 500
-  retry:
-    retry-aspect-order: 1000
-
 resilience4j.retry:
   configs:
     default:
@@ -58,8 +52,6 @@ resilience4j.retry:
       # List of Throwable classes that are recorded as a failure and thus are retried.
       retryExceptions:
         - feign.RetryableException
-        - feign.FeignException.FeignServerException
-        - feign.FeignException.TooManyRequests
         - java.io.IOException
         - java.util.concurrent.TimeoutException
       # Configures a list of Throwable classes that are ignored and thus are not retried
@@ -118,13 +110,15 @@ resilience4j.ratelimiter:
       # The default wait time a thread waits for a permission
       timeoutDuration: 0
 
-#resilience4j.timelimiter:
-#  configs:
-#    default:
-#      cancelRunningFuture: false
-#      timeoutDuration: 2s
-#  instances:
-#    backendA:
-#      baseConfig: default
-#    backendB:
-#      baseConfig: default
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: 1s
+
+
+#  to make Circuit Breaker starts after Retry finish its work you must change the aspect order as follow
+#resilience4j:
+#  circuitbreaker:
+#    circuitBreakerAspectOrder: 1
+#  retry:
+#    retryAspectOrder: 2

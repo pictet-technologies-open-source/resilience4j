@@ -19,6 +19,11 @@ public class CurrencyController {
     @ApiOperation("Get the exchange rates for a given currency")
     @GetMapping("/{currency}/exchange-rates")
     public ResponseEntity<CurrencyExchangeRates> getExchangeRates(@PathVariable final String currency, @RequestParam BigDecimal amount) {
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return ResponseEntity.ok(exchangeRateClient.getLatest(currency, amount));
     }
 

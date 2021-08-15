@@ -100,7 +100,7 @@ $ ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 
 The call is successful with the fallback applied after x retries
 
-----------
+
 
 ### Circuit breaker
 
@@ -166,7 +166,7 @@ $ ab -n 100 -c 11  'http://127.0.0.1:4200/items?currency=GBP'
 
 The calls are successful, but the fallback has been used for some calls
 
-----
+
 
 ### Rate limiter
 

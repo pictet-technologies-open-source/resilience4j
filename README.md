@@ -64,8 +64,109 @@ $ npm start
 $ ab -n x -c y 'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
-where x is the number of calls
+where x is the total number of calls
 and y the number of concurrent users  
+
+## Tests
+
+### Retry
+
+----------
+**Given**
+
+the exchange rate service is UP
+
+**When**
+```
+ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful
+
+----------
+
+**Given**
+
+the exchange rate service is DOWN
+
+**When**
+```
+ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful with the fallback applied after x retries
+
+----------
+
+### Circuit breaker
+
+----------
+**Given**
+
+the exchange rate service is UP
+
+**When**
+```
+ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful
+
+-----
+
+**Given** 
+
+the exchange rate service is DOWN
+
+```
+ab -n 20 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful using the circuit breaker fallback
+The circuit is open
+
+
+### Bulk head
+
+
+**Given**
+
+the exchange rate service is UP
+
+**When**
+
+```
+ab -n 100 -c 10  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful 
+
+----
+**Given**
+
+the exchange rate service is UP
+
+**When**
+
+```
+ab -n 100 -c 11  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The call is successful but the fallback has been used for some calls
+
+----
 
 
 ## References

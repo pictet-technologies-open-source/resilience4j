@@ -5,6 +5,8 @@ import com.pictet.technologies.resilience.resilience4j.store.provider.exchangera
 import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,8 @@ public class ExchangeRateService {
     //@Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = GET_RATE_FALLBACK)
     @Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME)
     @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallback")
-    @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallbackBulkhead")
+    @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesBulkheadFallback")
+    @RateLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRateLimiterFallback")
     public CurrencyExchangeRates getExchangeRates(String currency) {
 
         try {
@@ -48,7 +51,11 @@ public class ExchangeRateService {
 
     }
 
-    public CurrencyExchangeRates getExchangeRatesFallbackBulkhead(String currency, BulkheadFullException exception) {
+    public CurrencyExchangeRates getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
+        return getExchangeRatesFallback(currency, exception);
+    }
+
+    public CurrencyExchangeRates getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 

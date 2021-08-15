@@ -94,35 +94,30 @@ resilience4j.bulkhead:
       maxWaitDuration: 10ms
 
 
-resilience4j.thread-pool-bulkhead:
-  configs:
-    default:
-      # Configures the max thread pool size
-      maxThreadPoolSize: 4
-      # Configures the core thread pool size
-      coreThreadPoolSize: 2
-      # Capacity of the queue.
-      queueCapacity: 2
-      # When the number of threads is greater than the core, this is the maximum
-      # time that excess idle threads will wait for new tasks before terminating.
-      keepAliveDuration: 20ms
-
-#resilience4j.ratelimiter:
+#resilience4j.thread-pool-bulkhead:
 #  configs:
 #    default:
-#      registerHealthIndicator: false
-#      limitForPeriod: 10
-#      limitRefreshPeriod: 1s
-#      timeoutDuration: 0
-#      eventConsumerBufferSize: 100
-#  instances:
-#    backendA:
-#      baseConfig: default
-#    backendB:
-#      limitForPeriod: 6
-#      limitRefreshPeriod: 500ms
-#      timeoutDuration: 3s
-#
+#      # Configures the max thread pool size
+#      maxThreadPoolSize: 4
+#      # Configures the core thread pool size
+#      coreThreadPoolSize: 2
+#      # Capacity of the queue.
+#      queueCapacity: 2
+#      # When the number of threads is greater than the core, this is the maximum
+#      # time that excess idle threads will wait for new tasks before terminating.
+#      keepAliveDuration: 20ms
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      # The number of permissions available during one limit refresh period
+      limitForPeriod: 10
+      # The period of a limit refresh. After each period the rate limiter
+      # sets its permissions count back to the limitForPeriod value
+      limitRefreshPeriod: 5s
+      # The default wait time a thread waits for a permission
+      timeoutDuration: 0
+
 #resilience4j.timelimiter:
 #  configs:
 #    default:

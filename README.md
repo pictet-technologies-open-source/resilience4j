@@ -78,7 +78,7 @@ the exchange rate service is UP
 
 **When**
 ```
-ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
@@ -93,7 +93,7 @@ the exchange rate service is DOWN
 
 **When**
 ```
-ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
@@ -111,7 +111,7 @@ the exchange rate service is UP
 
 **When**
 ```
-ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 1 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
@@ -125,12 +125,12 @@ The call is successful
 the exchange rate service is DOWN
 
 ```
-ab -n 20 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 20 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
 
-The call is successful using the circuit breaker fallback
+The calls are successful using the circuit breaker fallback
 The circuit is open
 
 
@@ -144,12 +144,12 @@ the exchange rate service is UP
 **When**
 
 ```
-ab -n 100 -c 10  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 100 -c 10  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
 
-The call is successful 
+The calls are successful 
 
 ----
 **Given**
@@ -159,14 +159,47 @@ the exchange rate service is UP
 **When**
 
 ```
-ab -n 100 -c 11  'http://127.0.0.1:4200/items?currency=GBP'
+$ ab -n 100 -c 11  'http://127.0.0.1:4200/items?currency=GBP'
 ```
 
 **Then**
 
-The call is successful but the fallback has been used for some calls
+The calls are successful, but the fallback has been used for some calls
 
 ----
+
+### Rate limiter
+
+**Given**
+
+the exchange rate service is UP
+
+**When**
+
+```
+$ ab -n 10 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The calls are successful
+
+----
+
+**Given**
+
+the exchange rate service is UP
+
+**When**
+
+```
+$ ab -n 20 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
+```
+
+**Then**
+
+The calls are successful, but the fallback has been called for half of them
+
 
 
 ## References

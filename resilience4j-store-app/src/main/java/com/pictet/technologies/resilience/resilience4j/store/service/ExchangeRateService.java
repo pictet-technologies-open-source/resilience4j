@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 @RequiredArgsConstructor
@@ -30,18 +33,25 @@ public class ExchangeRateService {
     private CurrencyExchangeRates latestExchangesRates;
 
     @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesBulkheadFallback")
-    //@TimeLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesTimeLimiterFallback")
+    @TimeLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesTimeLimiterFallback")
     @RateLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRateLimiterFallback")
     @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesCircuitBreakerFallback")
     @Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallback")
-    public CurrencyExchangeRates getExchangeRates(String currency) {
+    public Future<CurrencyExchangeRates> getExchangeRates(String currency) {
 
         try {
-            final CurrencyExchangeRates rates = exchangeRateClient.getLatest(currency, BigDecimal.ONE);
-            this.latestExchangesRates = rates;
-            log.info("Exchange rate service called successfully");
 
-            return rates;
+            CompletableFuture<CurrencyExchangeRates> completableFuture = new CompletableFuture<>();
+
+            Executors.newCachedThreadPool().submit(() -> {
+                final CurrencyExchangeRates rates = exchangeRateClient.getLatest(currency, BigDecimal.ONE);
+                this.latestExchangesRates = rates;
+                log.info("Exchange rate service called successfully");
+
+                return completableFuture.complete(rates);
+            });
+
+            return completableFuture;
 
         } catch (Exception ex) {
             log.error("Exchange rate service failed with message: {}", ex.getMessage());
@@ -50,49 +60,53 @@ public class ExchangeRateService {
     }
 
     @SuppressWarnings("unused")
-    private CurrencyExchangeRates getExchangeRatesCircuitBreakerFallback(String currency, CallNotPermittedException exception) {
+    private Future<CurrencyExchangeRates> getExchangeRatesCircuitBreakerFallback(String currency, CallNotPermittedException exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
     @SuppressWarnings("unused")
-    private CurrencyExchangeRates getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
+    private Future<CurrencyExchangeRates> getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
     @SuppressWarnings("unused")
-    private CurrencyExchangeRates getExchangeRatesTimeLimiterFallback(String currency, Exception exception) {
+    private Future<CurrencyExchangeRates> getExchangeRatesTimeLimiterFallback(String currency, Exception exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
     @SuppressWarnings("unused")
-    private CurrencyExchangeRates getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
+    private Future<CurrencyExchangeRates> getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
         return getExchangeRatesFallback(currency, exception);
     }
 
-    private CurrencyExchangeRates getExchangeRatesFallback(String currency, Exception exception) {
+    private Future<CurrencyExchangeRates> getExchangeRatesFallback(String currency, Exception exception) {
+        CompletableFuture<CurrencyExchangeRates> completableFuture = new CompletableFuture<>();
 
-        log.error("Exchange rate fallback applied because of {}: {}", exception.getClass().getCanonicalName(), exception.getMessage());
+        Executors.newCachedThreadPool().submit(() -> {
+            log.error("Exchange rate fallback applied because of {}: {}", exception.getClass().getCanonicalName(), exception.getMessage());
 
-        if (latestExchangesRates == null) {
-            log.error("No exchange rates found for {}", currency);
-            return null;
-        }
+            if (latestExchangesRates == null) {
+                log.error("No exchange rates found for {}", currency);
+                return completableFuture.complete(null);
+            }
 
-        log.warn("use the latest received exchange rates received on {}", latestExchangesRates.getDate());
-        if (latestExchangesRates.getBase().equals(currency)) {
-            // No conversion to perform
-            return latestExchangesRates;
-        }
+            log.warn("use the latest received exchange rates received on {}", latestExchangesRates.getDate());
+            if (latestExchangesRates.getBase().equals(currency)) {
+                // No conversion to perform
+                return completableFuture.complete(latestExchangesRates);
+            }
 
-        // Build a new currency exchange rate
-        return new CurrencyExchangeRates()
-                .setBase(currency)
-                .setRates(new CurrencyExchangeRates.ExchangeRates()
-                        .setCad(computeExchangeRate(latestExchangesRates, currency, "CAD"))
-                        .setEur(computeExchangeRate(latestExchangesRates, currency, "EUR"))
-                        .setUsd(computeExchangeRate(latestExchangesRates, currency, "USD"))
-                        .setJpy(computeExchangeRate(latestExchangesRates, currency, "JPY"))
-                        .setGbp(computeExchangeRate(latestExchangesRates, currency, "GBP")));
+            // Build a new currency exchange rate
+            return completableFuture.complete(new CurrencyExchangeRates()
+                    .setBase(currency)
+                    .setRates(new CurrencyExchangeRates.ExchangeRates()
+                            .setCad(computeExchangeRate(latestExchangesRates, currency, "CAD"))
+                            .setEur(computeExchangeRate(latestExchangesRates, currency, "EUR"))
+                            .setUsd(computeExchangeRate(latestExchangesRates, currency, "USD"))
+                            .setJpy(computeExchangeRate(latestExchangesRates, currency, "JPY"))
+                            .setGbp(computeExchangeRate(latestExchangesRates, currency, "GBP"))));
+        });
+        return completableFuture;
     }
 
     private BigDecimal computeExchangeRate(CurrencyExchangeRates exchangeRates, String baseCurrency, String targetCurrency) {

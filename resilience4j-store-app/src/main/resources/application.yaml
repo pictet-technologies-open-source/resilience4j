@@ -113,8 +113,10 @@ resilience4j.ratelimiter:
 resilience4j.timelimiter:
   configs:
     default:
-      timeoutDuration: 1s
-
+      # if true running completable future will be cancel when the timeout duration is reached
+      cancelRunningFuture: true
+      # Time out duration
+      timeoutDuration: 4s
 
 #  to make Circuit Breaker starts after Retry finish its work you must change the aspect order as follow
 #resilience4j:

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -19,13 +20,13 @@ public class ItemService {
     private final ExchangeRateService exchangeRateService;
     private final ItemRepository itemRepository;
 
-    public List<Item> findAll(String currency) {
+    public List<Item> findAll(String currency) throws ExecutionException, InterruptedException {
 
         final List<Item> items = itemRepository.findAll();
 
         if(currency != null && !items.isEmpty()) {
 
-            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency);
+            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency).get();
             if(latestRates != null) {
                 items.forEach(item -> {
                     // Price conversion

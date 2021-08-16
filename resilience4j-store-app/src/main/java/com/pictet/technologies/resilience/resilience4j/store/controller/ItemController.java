@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,7 +26,7 @@ public class ItemController {
 
     @ApiOperation("Get the items")
     @GetMapping
-    public ResponseEntity<List<ItemResource>> getItems(@RequestParam(required = false) String currency) {
+    public ResponseEntity<List<ItemResource>> getItems(@RequestParam(required = false) String currency) throws ExecutionException, InterruptedException {
 
         return ResponseEntity.ok(itemService.findAll(currency).stream()
                 .map(itemMapper::toResource)

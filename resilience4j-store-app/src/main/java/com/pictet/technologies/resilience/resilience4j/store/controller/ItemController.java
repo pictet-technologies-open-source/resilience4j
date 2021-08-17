@@ -26,7 +26,7 @@ public class ItemController {
 
     @ApiOperation("Get the items")
     @GetMapping
-    public ResponseEntity<List<ItemResource>> getItems(@RequestParam(required = false) String currency) throws ExecutionException, InterruptedException {
+    public ResponseEntity<List<ItemResource>> getItems(@RequestParam(required = false) String currency) {
 
         return ResponseEntity.ok(itemService.findAll(currency).stream()
                 .map(itemMapper::toResource)

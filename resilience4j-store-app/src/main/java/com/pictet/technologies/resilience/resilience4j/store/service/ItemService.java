@@ -20,14 +20,14 @@ public class ItemService {
     private final ExchangeRateService exchangeRateService;
     private final ItemRepository itemRepository;
 
-    public List<Item> findAll(String currency) throws ExecutionException, InterruptedException {
+    public List<Item> findAll(String currency) {
 
         final List<Item> items = itemRepository.findAll();
 
-        if(currency != null && !items.isEmpty()) {
+        if (currency != null && !items.isEmpty()) {
 
-            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency).get();
-            if(latestRates != null) {
+            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency);
+            if (latestRates != null) {
                 items.forEach(item -> {
                     // Price conversion
                     final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());

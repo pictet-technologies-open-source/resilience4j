@@ -75,7 +75,12 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 10
       # The time that the CircuitBreaker should wait before transitioning from open to half-open.
       waitDurationInOpenState: 10000
-
+      # Configures a threshold in percentage. The CircuitBreaker considers a call as slow
+      # when the call duration is greater than slowCallDurationThreshold
+      slowCallRateThreshold: 100
+      # Configures the duration threshold above which calls are considered
+      # as slow and increase the rate of slow calls
+      slowCallDurationThreshold: 10s
 
 resilience4j.bulkhead:
   configs:
@@ -113,10 +118,12 @@ resilience4j.ratelimiter:
 resilience4j.timelimiter:
   configs:
     default:
-      # if true running completable future will be cancel when the timeout duration is reached
+      # if true running futures will be cancel when the timeout duration is reached
+      # Warning when cancelling completable futures, you may have to write your own logic
+      # see https://dzone.com/articles/completablefuture-cant-be
       cancelRunningFuture: true
       # Time out duration
-      timeoutDuration: 4s
+      timeoutDuration: 2s
 
 #  to make Circuit Breaker starts after Retry finish its work you must change the aspect order as follow
 #resilience4j:

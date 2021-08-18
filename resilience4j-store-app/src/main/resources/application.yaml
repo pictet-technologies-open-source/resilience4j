@@ -52,11 +52,11 @@ resilience4j.retry:
       # List of Throwable classes that are recorded as a failure and thus are retried.
       retryExceptions:
         - feign.RetryableException
+        - feign.FeignException.InternalServerError
         - java.io.IOException
-        - java.util.concurrent.TimeoutException
       # Configures a list of Throwable classes that are ignored and thus are not retried
-      ignoreExceptions:
-        - feign.FeignException.NotImplemented
+      # ignoreExceptions:
+      #  - ...
 
 resilience4j.circuitbreaker:
   instances:

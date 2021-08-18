@@ -32,7 +32,7 @@ public class ExchangeRateService {
     private CurrencyExchangeRates latestExchangesRates;
 
     @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesBulkheadFallback")
-    @TimeLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesTimeLimiterFallback")
+    @TimeLimiter(name = GET_RATE_RESILIENCE_NAME)
     @RateLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRateLimiterFallback")
     @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesCircuitBreakerFallback")
     @Retry(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesFallback")

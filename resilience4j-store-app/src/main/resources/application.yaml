@@ -53,7 +53,6 @@ resilience4j.retry:
       retryExceptions:
         - feign.RetryableException
         - java.io.IOException
-        - java.util.concurrent.TimeoutException
       # Configures a list of Throwable classes that are ignored and thus are not retried
       ignoreExceptions:
         - feign.FeignException.NotImplemented

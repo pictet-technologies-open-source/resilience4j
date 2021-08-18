@@ -26,14 +26,21 @@ public class ItemService {
 
         if (currency != null && !items.isEmpty()) {
 
-            final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency);
-            if (latestRates != null) {
-                items.forEach(item -> {
-                    // Price conversion
-                    final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());
-                    item.setCurrency(currency);
-                    item.setPrice(item.getPrice().divide(conversionRate, 2, RoundingMode.HALF_UP));
-                });
+            try {
+                final CurrencyExchangeRates latestRates = exchangeRateService.getExchangeRates(currency).get();
+                if (latestRates != null) {
+                    items.forEach(item -> {
+                        // Price conversion
+                        final BigDecimal conversionRate = latestRates.getConversionRate(item.getCurrency());
+                        item.setCurrency(currency);
+                        item.setPrice(item.getPrice().divide(conversionRate, 2, RoundingMode.HALF_UP));
+                    });
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.error(e.getMessage(), e);
+            } catch(ExecutionException e) {
+                log.error(e.getMessage(), e);
             }
         }
 

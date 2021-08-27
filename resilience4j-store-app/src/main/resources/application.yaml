@@ -74,7 +74,7 @@ resilience4j.circuitbreaker:
       # Configures the number of permitted calls when the CircuitBreaker is half open.
       permittedNumberOfCallsInHalfOpenState: 10
       # The time that the CircuitBreaker should wait before transitioning from open to half-open.
-      waitDurationInOpenState: 10000
+      waitDurationInOpenState: 20000
       # Configures a threshold in percentage. The CircuitBreaker considers a call as slow
       # when the call duration is greater than slowCallDurationThreshold
       slowCallRateThreshold: 100

@@ -140,6 +140,7 @@ The circuit is open
 **Given**
 
 the exchange rate service is UP
+and the rate limiter is disabled
 
 **When**
 
@@ -155,6 +156,7 @@ The calls are successful
 **Given**
 
 the exchange rate service is UP
+and the rate limiter is disabled
 
 **When**
 

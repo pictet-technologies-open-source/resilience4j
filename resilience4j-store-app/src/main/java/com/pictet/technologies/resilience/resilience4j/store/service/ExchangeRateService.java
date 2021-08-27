@@ -28,6 +28,8 @@ public class ExchangeRateService {
     // Cached exchange rates, for recovery purpose
     private CurrencyExchangeRates latestExchangesRates;
 
+    // The Resilience4j Aspects order is following:
+    // Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( Function ) ) ) ) )
     @Bulkhead(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesBulkheadFallback")
     @RateLimiter(name = GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesRateLimiterFallback")
     @CircuitBreaker(name = ExchangeRateService.GET_RATE_RESILIENCE_NAME, fallbackMethod = "getExchangeRatesCircuitBreakerFallback")
@@ -35,6 +37,7 @@ public class ExchangeRateService {
     public CurrencyExchangeRates getExchangeRates(String currency) {
 
         try {
+            log.info("Call Exchange rate service");
 
             final CurrencyExchangeRates rates = exchangeRateClient.getLatest(currency, BigDecimal.ONE);
             this.latestExchangesRates = rates;
@@ -49,16 +52,22 @@ public class ExchangeRateService {
 
     @SuppressWarnings("unused")
     private CurrencyExchangeRates getExchangeRatesCircuitBreakerFallback(String currency, CallNotPermittedException exception) {
+
+        log.info("Circuit Breaker Fallback");
         return getExchangeRatesFallback(currency, exception);
     }
 
     @SuppressWarnings("unused")
     private CurrencyExchangeRates getExchangeRatesRateLimiterFallback(String currency, RequestNotPermitted exception) {
+
+        log.info("Rate Limiter Fallback");
         return getExchangeRatesFallback(currency, exception);
     }
 
     @SuppressWarnings("unused")
     private CurrencyExchangeRates getExchangeRatesBulkheadFallback(String currency, BulkheadFullException exception) {
+
+        log.info("Bulkhead Fallback");
         return getExchangeRatesFallback(currency, exception);
     }
 

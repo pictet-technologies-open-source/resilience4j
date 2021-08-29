@@ -95,11 +95,11 @@ resilience4j.bulkhead:
 #  configs:
 #    default:
 #      # Configures the max thread pool size
-#      maxThreadPoolSize: 4
+#      maxThreadPoolSize: 12
 #      # Configures the core thread pool size
-#      coreThreadPoolSize: 2
+#      coreThreadPoolSize: 11
 #      # Capacity of the queue.
-#      queueCapacity: 2
+#      queueCapacity: 100
 #      # When the number of threads is greater than the core, this is the maximum
 #      # time that excess idle threads will wait for new tasks before terminating.
 #      keepAliveDuration: 20ms

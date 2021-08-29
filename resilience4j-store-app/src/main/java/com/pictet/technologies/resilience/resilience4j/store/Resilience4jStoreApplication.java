@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class Resilience4jStoreApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(Resilience4jStoreApplication.class, args);
     }
 

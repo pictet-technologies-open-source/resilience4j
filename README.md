@@ -124,6 +124,8 @@ The call is successful
 
 the exchange rate service is DOWN
 
+**When**
+
 ```
 $ ab -n 20 -c 1  'http://127.0.0.1:4200/items?currency=GBP'
 ```
